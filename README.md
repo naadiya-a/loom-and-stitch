@@ -12,4 +12,6 @@ This project is currently in development.
 
 This is an ongoing personal project. The goal of this project is to learn React and gain experience building a full-stack web application.
 
-The project was inspired by my own need for an app to easily track my crochet projects. For each yarn project, users will be able to store images, notes, and stitch counts.
+The project was inspired by my own need for an app to easily track my crochet projects. For each yarn project, users will be able to store important details such as stitch counts and the type of yarn used. 
+
+These features will help crafters to keep track of their projects in progress and later refer back to this information to re-create old projects. It will also be useful for designers who wish to track their steps for the purpose of pattern writing or ensuring that they have consistent sizing.
