@@ -1,17 +1,36 @@
-# Loom & Stitch
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-A web application for users to track their crochet and knit projects, built with React and CSS.
+## Getting Started
 
-This project is currently in development.
+First, run the development server:
 
-## Preview:
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-![Project view](https://github.com/naadiya-a/loom-and-stitch/blob/main/src/images/preview.png?raw=true)
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Reflection:
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This is an ongoing personal project. The goal of this project is to learn React and gain experience building a full-stack web application.
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-The project was inspired by my own need for an app to easily track my crochet projects. For each yarn project, users will be able to store important details such as stitch counts and the type of yarn used. 
+## Learn More
 
-These features will help crafters to keep track of their projects in progress and later refer back to this information to re-create old projects. It will also be useful for designers who wish to track their steps for the purpose of pattern writing or ensuring that they have consistent sizing.
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
