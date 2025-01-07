@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { StitchCounter } from './stitch-counter';
 import { Plus, ImagePlus } from 'lucide-react';
 import { Project, ProjectType } from '../lib/types';
+import { TitleInput } from './ui/title-input';
 
 interface ProjectDetailsProps {
   project: Project | null;
@@ -81,12 +82,11 @@ export function ProjectDetails({ project, onSave }: ProjectDetailsProps) {
       <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 max-w-6xl mx-auto space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-start gap-6">
           <div className="flex-1 space-y-4">
-            <Input
+            <TitleInput
               id="name"
               value={formData.name}
               onChange={handleInputChange}
               placeholder="Enter project title"
-              className="text-3xl sm:text-4xl font-semibold"
               required
             />
             <div className="space-y-2">
