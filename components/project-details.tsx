@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,8 +10,17 @@ import { StitchCounter } from './stitch-counter';
 import { Plus, ImagePlus } from 'lucide-react';
 import { Project } from '../lib/types';
 
-export function ProjectDetails({ project }: { project?: Project }) {
-  const [type, setType] = useState<string>(project?.type || 'crochet');
+export function ProjectDetails() {
+  const params = useParams();
+
+  const project: Project = {
+    id: 'socks',
+    name: 'Socks',
+    type: 'crochet',
+    hooks: '',
+    yarn: '',
+    notes: '',
+  };
 
   return (
     <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 max-w-6xl mx-auto space-y-8">
@@ -21,8 +30,8 @@ export function ProjectDetails({ project }: { project?: Project }) {
           <div className="space-y-2">
             <Label className="text-sm font-medium">Project Type</Label>
             <RadioGroup
-              defaultValue={type}
-              onValueChange={setType}
+              value={project.type}
+              onValueChange={() => {}}
               className="flex flex-wrap gap-4"
             >
               <div className="flex items-center space-x-2">
