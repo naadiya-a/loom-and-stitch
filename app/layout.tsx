@@ -16,11 +16,7 @@ export default function RootLayout({
           <Link href="/" className="text-3xl">
             Loom & Stitch
           </Link>
-          <nav className="flex items-center gap-4">
-            <Link href="/" className="hover:text-gray-600 px-4">
-              Projects
-            </Link>
-          </nav>
+          <Navbar />
         </div>
         <main className="flex-1 flex overflow-hidden">{children}</main>
       </body>

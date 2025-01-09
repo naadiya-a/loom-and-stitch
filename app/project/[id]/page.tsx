@@ -6,12 +6,20 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Project } from '@/lib/types';
 import { createProject, getAllProjects, updateProject } from '@/data/db';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function ProjectPage() {
   const params = useParams();
   const router = useRouter();
   const [projects, setProjects] = useState<Project[]>([]);
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
+  const { user, loading } = useAuth();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
 
   useEffect(() => {
     getAllProjects().then((allProjects) => {
@@ -50,6 +58,14 @@ export default function ProjectPage() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center w-full">
+    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900"></div>
+  </div>
+    );
+  }
+  
   return (
     <div className="flex flex-col md:flex-row h-full w-full">
       <div className="md:w-72 md:flex-shrink-0 md:border-r overflow-auto">

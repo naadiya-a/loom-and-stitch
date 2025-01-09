@@ -3,10 +3,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { createUser } from '@/lib/auth';
 
 export default function SignUpPage() {
@@ -21,14 +21,13 @@ export default function SignUpPage() {
       alert("Passwords don't match");
       return;
     }
-    // TODO: Implement Firebase authentication
     createUser(email, password)
-    .then((user) => {
+      .then((user) => {
         router.push('/');
-    })
-    .catch((err: Error) => {
+      })
+      .catch((err: Error) => {
         alert(err.message);
-    });
+      });
   };
 
   return (
@@ -74,7 +73,9 @@ export default function SignUpPage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full">Sign Up</Button>
+            <Button type="submit" className="w-full">
+              Sign Up
+            </Button>
             <p className="text-sm text-center">
               Already have an account?{' '}
               <Link href="/login" className="text-blue-500 hover:underline">
@@ -87,4 +88,3 @@ export default function SignUpPage() {
     </div>
   );
 }
-
