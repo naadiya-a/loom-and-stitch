@@ -2,70 +2,41 @@
 
 import { ProjectList } from '@/components/project-list';
 import { ProjectDetails } from '@/components/project-details';
+import { ProjectDetailsSkeleton } from '@/components/project-details-skeleton';
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Project } from '@/lib/types';
-import { createProject, getAllProjects, updateProject } from '@/data/db';
 import { useAuth } from '@/hooks/useAuth';
+import { useProjects } from '@/hooks/useProjects';
+import LoadingSpinner from '@/components/loading-spinner';
 
 export default function ProjectPage() {
   const params = useParams();
   const router = useRouter();
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [currentProject, setCurrentProject] = useState<Project | null>(null);
-  const { user, loading } = useAuth();
+  const { user, loading: authLoading } = useAuth();
+  const { projects, currentProject, loading, saveProject } = useProjects(
+    params.id as string
+  );
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!authLoading && !user) {
       router.push('/login');
     }
-  }, [user, loading, router]);
-
-  useEffect(() => {
-    getAllProjects().then((allProjects) => {
-      setProjects(allProjects);
-      if (params.id === 'new') {
-        setCurrentProject(null);
-      } else if (params.id) {
-        const project = allProjects.find((p) => p.id === params.id);
-        setCurrentProject(project || null);
-      } else if (allProjects.length > 0) {
-        router.push(`/project/${allProjects[0].id}`);
-      }
-    });
-  }, [params, router]);
+  }, [user, authLoading, router]);
 
   const handleNewProject = () => {
     router.push('/project/new');
   };
 
-  const handleSaveProject = async (project: Omit<Project, 'id'>) => {
-    if (currentProject) {
-      await updateProject({
-        ...project,
-        id: currentProject.id,
-      });
-      setProjects(
-        projects.map((p) => (p.id === currentProject.id ? currentProject : p))
-      );
-      setCurrentProject(currentProject);
-    } else {
-      const id = await createProject(project);
-      const newProject = { ...project, id };
-      setProjects([...projects, newProject]);
-      setCurrentProject(newProject);
-      router.push(`/project/${id}`);
-    }
+  const handleSaveProject = async (projectData: Omit<Project, 'id'>) => {
+    const id = await saveProject(projectData);
+    router.push(`/project/${id}`);
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center w-full">
-    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900"></div>
-  </div>
-    );
+  if (authLoading) {
+    return <LoadingSpinner />;
   }
-  
+
   return (
     <div className="flex flex-col md:flex-row h-full w-full">
       <div className="md:w-72 md:flex-shrink-0 md:border-r overflow-auto">
@@ -76,7 +47,11 @@ export default function ProjectPage() {
         />
       </div>
       <div className="flex-grow overflow-auto">
-        <ProjectDetails project={currentProject} onSave={handleSaveProject} />
+        {loading ? (
+          <ProjectDetailsSkeleton />
+        ) : (
+          <ProjectDetails project={currentProject} onSave={handleSaveProject} />
+        )}
       </div>
     </div>
   );

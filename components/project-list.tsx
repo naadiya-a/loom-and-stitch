@@ -23,6 +23,10 @@ export function ProjectList({
   currentProjectId,
   onNewProject,
 }: ProjectListProps) {
+  const sortedProjects = [...projects].sort((a, b) =>
+    a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
+  );
+
   return (
     <div className="p-4 space-y-4">
       <Button
@@ -38,7 +42,7 @@ export function ProjectList({
             <SelectValue placeholder="Select a project" />
           </SelectTrigger>
           <SelectContent>
-            {projects.map((project) => (
+            {sortedProjects.map((project) => (
               <SelectItem key={project.id} value={project.id}>
                 <Link href={`/project/${project.id}`} className="block py-2">
                   {project.name}
@@ -49,7 +53,7 @@ export function ProjectList({
         </Select>
       </div>
       <div className="hidden md:block space-y-2">
-        {projects.map((project) => (
+        {sortedProjects.map((project) => (
           <Link
             key={project.id}
             href={`/project/${project.id}`}
