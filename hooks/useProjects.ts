@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import { Project } from '@/lib/types';
-import { getAllProjects, updateProject, createProject } from '@/data/db';
+import { useState, useEffect, useCallback } from "react";
+import { Project } from "@/lib/types";
+import { getAllProjects, updateProject, createProject } from "@/data/db";
 
 let projectsCache: Project[] | null = null;
 
@@ -13,14 +13,15 @@ export function useProjects(currentId: string | null) {
 
   const fetchProjects = useCallback(
     async (force = false) => {
+      setLoading(true);
       // Skip fetching if we have cached data and aren't forcing a refresh
       if (projectsCache && !force) {
         setProjects(projectsCache);
-        if (currentId === 'new') {
+        if (currentId === "new") {
           setCurrentProject(null);
         } else if (currentId) {
           setCurrentProject(
-            projectsCache.find((p) => p.id === currentId) || null
+            projectsCache.find((p) => p.id === currentId) || null,
           );
         }
         setLoading(false);
@@ -31,21 +32,21 @@ export function useProjects(currentId: string | null) {
       projectsCache = allProjects;
       setProjects(allProjects);
 
-      if (currentId === 'new') {
+      if (currentId === "new") {
         setCurrentProject(null);
       } else if (currentId) {
         setCurrentProject(allProjects.find((p) => p.id === currentId) || null);
       }
       setLoading(false);
     },
-    [currentId]
+    [currentId],
   );
 
   useEffect(() => {
     fetchProjects();
-  }, [fetchProjects]);
+  }, [fetchProjects, currentId]);
 
-  const saveProject = async (project: Omit<Project, 'id'>) => {
+  const saveProject = async (project: Omit<Project, "id">) => {
     const id = currentProject
       ? await updateProject({ ...project, id: currentProject.id })
       : await createProject(project);
