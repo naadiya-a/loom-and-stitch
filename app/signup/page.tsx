@@ -1,19 +1,29 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { createUser } from '@/lib/auth';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { createUser } from "@/lib/auth";
+import { useAuth } from "@/hooks/useAuth";
+import LoadingSpinner from "@/components/loading-spinner";
 
 export default function SignUpPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+  const { isAuthenticated, loading } = useAuth();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/");
+    }
+  }, [isAuthenticated, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,21 +31,26 @@ export default function SignUpPage() {
       alert("Passwords don't match");
       return;
     }
+    setIsSubmitting(true);
     createUser(email, password)
       .then((user) => {
-        router.push('/');
+        router.push("/");
       })
       .catch((err: Error) => {
         alert(err.message);
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   };
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 w-full">
       <Card className="w-full max-w-md pt-4">
-        {/* <CardHeader>
-          <CardTitle>Sign Up</CardTitle>
-        </CardHeader> */}
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
@@ -73,11 +88,11 @@ export default function SignUpPage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full">
-              Sign Up
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? "Creating account..." : "Sign Up"}
             </Button>
             <p className="text-sm text-center">
-              Already have an account?{' '}
+              Already have an account?{" "}
               <Link href="/login" className="text-blue-500 hover:underline">
                 Login
               </Link>

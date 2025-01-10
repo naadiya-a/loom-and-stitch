@@ -1,15 +1,21 @@
-import './globals.css';
-import Link from 'next/link';
-import { Inter } from 'next/font/google';
-import Navbar from '@/components/nav-bar';
+"use client";
 
-const inter = Inter({ subsets: ['latin'] });
+import "./globals.css";
+import Link from "next/link";
+import { Inter } from "next/font/google";
+import Navbar from "@/components/nav-bar";
+import { useAuth } from "@/hooks/useAuth";
+import LoadingSpinner from "@/components/loading-spinner";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { isAuthenticated } = useAuth();
+
   return (
     <html lang="en">
       <link
@@ -21,7 +27,7 @@ export default function RootLayout({
           <Link href="/" className="text-3xl">
             Loom & Stitch
           </Link>
-          <Navbar />
+          {isAuthenticated && <Navbar />}
         </div>
         <main className="flex-1 flex overflow-hidden">{children}</main>
       </body>
