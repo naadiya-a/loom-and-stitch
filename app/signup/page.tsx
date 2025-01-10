@@ -37,14 +37,12 @@ export default function SignUpPage() {
         router.push("/");
       })
       .catch((err: Error) => {
-        alert(err.message);
-      })
-      .finally(() => {
         setIsSubmitting(false);
+        alert(err.message);
       });
   };
 
-  if (loading) {
+  if (loading || isSubmitting) {
     return <LoadingSpinner />;
   }
 
@@ -88,8 +86,8 @@ export default function SignUpPage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? "Creating account..." : "Sign Up"}
+            <Button type="submit" className="w-full">
+              Sign Up
             </Button>
             <p className="text-sm text-center">
               Already have an account?{" "}

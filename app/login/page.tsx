@@ -32,14 +32,12 @@ export default function Login() {
         router.push("/");
       })
       .catch((err: Error) => {
-        alert(err.message);
-      })
-      .finally(() => {
         setIsSubmitting(false);
+        alert(err.message);
       });
   };
 
-  if (loading) {
+  if (loading || isSubmitting) {
     return <LoadingSpinner />;
   }
 
@@ -72,8 +70,8 @@ export default function Login() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? "Logging in..." : "Login"}
+            <Button type="submit" className="w-full">
+              Login
             </Button>
             <p className="text-sm text-center">
               Don't have an account?{" "}
