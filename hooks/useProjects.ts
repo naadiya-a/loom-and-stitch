@@ -14,29 +14,20 @@ export function useProjects(currentId: string | null) {
   const fetchProjects = useCallback(
     async (force = false) => {
       setLoading(true);
-      // Skip fetching if we have cached data and aren't forcing a refresh
-      if (projectsCache && !force) {
-        setProjects(projectsCache);
-        if (currentId === "new") {
-          setCurrentProject(null);
-        } else if (currentId) {
-          setCurrentProject(
-            projectsCache.find((p) => p.id === currentId) || null,
-          );
-        }
-        setLoading(false);
-        return;
+
+      if (!projectsCache || force) {
+        const allProjects = await getAllProjects();
+        projectsCache = allProjects;
       }
 
-      const allProjects = await getAllProjects();
-      projectsCache = allProjects;
-      setProjects(allProjects);
-
+      setProjects(projectsCache);
       if (currentId === "new") {
         setCurrentProject(null);
       } else if (currentId) {
-        setCurrentProject(allProjects.find((p) => p.id === currentId) || null);
+        const project = projectsCache.find((p) => p.id === currentId);
+        setCurrentProject(project || null);
       }
+
       setLoading(false);
     },
     [currentId],
@@ -44,20 +35,19 @@ export function useProjects(currentId: string | null) {
 
   useEffect(() => {
     fetchProjects();
-  }, [fetchProjects, currentId]);
+  }, []);
+
+  const invalidateCache = () => {
+    projectsCache = null;
+    fetchProjects(true);
+  };
 
   const saveProject = async (project: Omit<Project, "id">) => {
     const id = currentProject
       ? await updateProject({ ...project, id: currentProject.id })
       : await createProject(project);
-    projectsCache = null;
-    await fetchProjects(true);
+    invalidateCache();
     return id;
-  };
-
-  const invalidateCache = () => {
-    projectsCache = null;
-    fetchProjects(true);
   };
 
   return {
