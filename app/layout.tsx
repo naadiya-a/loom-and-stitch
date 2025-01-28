@@ -3,8 +3,7 @@ import './globals.css';
 import Link from 'next/link';
 import { Inter } from 'next/font/google';
 import Navbar from '@/components/nav-bar';
-import AuthContext, { AuthProvider } from '@/context/authContext';
-import { use } from 'react';
+import { AuthProvider } from '@/context/authContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -13,8 +12,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { userId } = use(AuthContext);
-
   return (
     <html lang="en">
       <link
@@ -27,7 +24,7 @@ export default function RootLayout({
             <Link href="/" className="text-3xl">
               Loom & Stitch
             </Link>
-            {userId && <Navbar />}
+            <Navbar />
           </div>
           <main className="flex-1 flex overflow-hidden">{children}</main>
         </AuthProvider>

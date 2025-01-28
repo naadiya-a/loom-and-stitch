@@ -40,7 +40,7 @@ export function useProjects(currentId: string | null) {
 
   useEffect(() => {
     fetchProjects();
-  }, []);
+  }, [fetchProjects]);
 
   const invalidateCache = () => {
     projectsCache = null;
