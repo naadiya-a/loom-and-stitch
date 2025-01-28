@@ -1,34 +1,37 @@
-"use client";
+'use client';
 
-import { ProjectList } from "@/components/project-list";
-import { ProjectDetails } from "@/components/project-details";
-import { ProjectDetailsSkeleton } from "@/components/project-details-skeleton";
-import { useParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { Project } from "@/lib/types";
-import { useAuth } from "@/hooks/useAuth";
-import { useProjects } from "@/hooks/useProjects";
-import LoadingSpinner from "@/components/loading-spinner";
+import { ProjectList } from '@/components/project-list';
+import { ProjectDetails } from '@/components/project-details';
+import { ProjectDetailsSkeleton } from '@/components/project-details-skeleton';
+import { useParams, useRouter } from 'next/navigation';
+import { use, useEffect } from 'react';
+import { Project } from '@/lib/types';
+import { useProjects } from '@/hooks/useProjects';
+import LoadingSpinner from '@/components/loading-spinner';
+import AuthContext from '@/context/authContext';
 
 export default function ProjectPage() {
   const params = useParams();
   const router = useRouter();
-  const { user, loading: authLoading } = useAuth();
-  const { projects, currentProject, loading, saveProject } = useProjects(
-    params.id as string,
-  );
+  const {
+    projects,
+    currentProject,
+    loading: projectsLoading,
+    saveProject,
+  } = useProjects(params.id as string);
+  const { userId, loading: authLoading } = use(AuthContext);
 
   useEffect(() => {
-    if (!authLoading && !user) {
-      router.push("/login");
+    if (!authLoading && (!userId || userId === '')) {
+      router.push('/login');
     }
-  }, [user, authLoading, router]);
+  }, [userId, authLoading, router]);
 
   const handleNewProject = () => {
-    router.push("/project/new");
+    router.push('/project/new');
   };
 
-  const handleSaveProject = async (projectData: Omit<Project, "id">) => {
+  const handleSaveProject = async (projectData: Omit<Project, 'id'>) => {
     const id = await saveProject(projectData);
     router.push(`/project/${id}`);
   };
@@ -47,7 +50,7 @@ export default function ProjectPage() {
         />
       </div>
       <div className="flex-grow overflow-auto z-0 mt-4 md:mt-0">
-        {loading ? (
+        {projectsLoading ? (
           <ProjectDetailsSkeleton />
         ) : (
           <ProjectDetails project={currentProject} onSave={handleSaveProject} />

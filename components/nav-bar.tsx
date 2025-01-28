@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import Link from 'next/link';
 import { logout } from '@/lib/auth';
@@ -14,7 +14,10 @@ export default function Navbar() {
 
   return (
     <nav className="flex items-center gap-4">
-      <Link href="/" className="hover:text-gray-700 px-4 py-2 hover:bg-gray-100 rounded-md">
+      <Link
+        href="/"
+        className="hover:text-gray-700 px-4 py-2 hover:bg-gray-100 rounded-md"
+      >
         Projects
       </Link>
       <button

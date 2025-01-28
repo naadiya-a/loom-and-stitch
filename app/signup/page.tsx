@@ -1,29 +1,29 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { createUser } from "@/lib/auth";
-import { useAuth } from "@/hooks/useAuth";
-import LoadingSpinner from "@/components/loading-spinner";
+import { use, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { createUser } from '@/lib/auth';
+import LoadingSpinner from '@/components/loading-spinner';
+import AuthContext from '@/context/authContext';
 
 export default function SignUpPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
-  const { isAuthenticated, loading } = useAuth();
+  const { userId, loading } = use(AuthContext);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      router.push("/");
+    if (userId) {
+      router.push('/');
     }
-  }, [isAuthenticated, router]);
+  }, [userId, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,8 +33,8 @@ export default function SignUpPage() {
     }
     setIsSubmitting(true);
     createUser(email, password)
-      .then((user) => {
-        router.push("/");
+      .then(() => {
+        router.push('/');
       })
       .catch((err: Error) => {
         setIsSubmitting(false);
@@ -90,7 +90,7 @@ export default function SignUpPage() {
               Sign Up
             </Button>
             <p className="text-sm text-center">
-              Already have an account?{" "}
+              Already have an account?{' '}
               <Link href="/login" className="text-blue-500 hover:underline">
                 Login
               </Link>

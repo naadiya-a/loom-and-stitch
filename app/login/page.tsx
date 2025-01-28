@@ -1,35 +1,35 @@
-"use client";
+'use client';
 
-import LoadingSpinner from "@/components/loading-spinner";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useAuth } from "@/hooks/useAuth";
-import { login } from "@/lib/auth";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import LoadingSpinner from '@/components/loading-spinner';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import AuthContext from '@/context/authContext';
+import { login } from '@/lib/auth';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { use, useEffect, useState } from 'react';
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
-  const { isAuthenticated, loading } = useAuth();
+  const { userId, loading } = use(AuthContext);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      router.push("/");
+    if (userId) {
+      router.push('/');
     }
-  }, [isAuthenticated, router]);
+  }, [userId, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     login(email, password)
-      .then((user) => {
-        router.push("/");
+      .then(() => {
+        router.push('/');
       })
       .catch((err: Error) => {
         setIsSubmitting(false);
@@ -74,7 +74,7 @@ export default function Login() {
               Login
             </Button>
             <p className="text-sm text-center">
-              Don't have an account?{" "}
+              Don't have an account?{' '}
               <Link href="/signup" className="text-blue-500 hover:underline">
                 Sign up
               </Link>
