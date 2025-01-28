@@ -5,14 +5,14 @@ export type Project = {
   hooks?: string;
   yarn?: string;
   notes?: string;
-  counters: Counter[],
+  counters: Counter[];
 };
 
 export type Counter = {
   id: string;
   name: string;
   value: number;
-}
+};
 
 export enum ProjectType {
   Crochet = 'crochet',

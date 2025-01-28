@@ -26,11 +26,12 @@ const initialProjectState: Omit<Project, 'id'> = {
 };
 
 export function ProjectDetails({ project, onSave }: ProjectDetailsProps) {
-  const [formData, setFormData] = useState<Omit<Project, 'id'>>(initialProjectState);
+  const [formData, setFormData] =
+    useState<Omit<Project, 'id'>>(initialProjectState);
 
   useEffect(() => {
     if (project) {
-      setFormData({...formData, ...project});
+      setFormData({ ...formData, ...project });
     }
   }, [project]);
 
@@ -52,28 +53,27 @@ export function ProjectDetails({ project, onSave }: ProjectDetailsProps) {
   const addCounter = () => {
     const counterName = prompt('Enter counter name:');
     if (counterName) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         counters: [
           ...(prev.counters || []),
-          { 
+          {
             id: crypto.randomUUID(),
-            name: counterName, 
-            value: 0 
-          }
-        ]
+            name: counterName,
+            value: 0,
+          },
+        ],
       }));
     }
   };
 
   const updateCounter = (id: string, value: number) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      counters: prev.counters?.map(counter => 
-        counter.id === id
-          ? { ...counter, value }
-          : counter
-      ) || []
+      counters:
+        prev.counters?.map((counter) =>
+          counter.id === id ? { ...counter, value } : counter
+        ) || [],
     }));
   };
 
@@ -188,8 +188,8 @@ export function ProjectDetails({ project, onSave }: ProjectDetailsProps) {
         </div>
 
         <Button type="submit" className="w-full">
-        Save
-      </Button>
+          Save
+        </Button>
       </div>
     </form>
   );

@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { Plus } from "lucide-react";
-import { Project } from "@/lib/types";
-import { Button } from "@/components/ui/button";
+import Link from 'next/link';
+import { Plus } from 'lucide-react';
+import { Project } from '@/lib/types';
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { useRouter } from "next/navigation";
+} from '@/components/ui/select';
+import { useRouter } from 'next/navigation';
 
 interface ProjectListProps {
   projects: Project[];
@@ -25,7 +25,7 @@ export function ProjectList({
   onNewProject,
 }: ProjectListProps) {
   const sortedProjects = [...projects].sort((a, b) =>
-    a.name.localeCompare(b.name, undefined, { sensitivity: "base" }),
+    a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
   );
   const router = useRouter();
 
@@ -59,8 +59,8 @@ export function ProjectList({
             href={`/project/${project.id}`}
             className={`block w-full p-4 text-left text-lg font-semibold rounded-lg transition-colors ${
               currentProjectId === project.id
-                ? "bg-[#FFD5B4]"
-                : "bg-[#FFE4C4] hover:bg-[#FFD5B4]"
+                ? 'bg-[#FFD5B4]'
+                : 'bg-[#FFE4C4] hover:bg-[#FFD5B4]'
             }`}
           >
             {project.name}
