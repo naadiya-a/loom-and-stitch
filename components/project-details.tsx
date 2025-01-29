@@ -99,7 +99,7 @@ export function ProjectDetails({ project, onSave }: ProjectDetailsProps) {
                 onValueChange={handleTypeChange}
                 className="flex flex-wrap gap-4"
               >
-                {['crochet', 'knit', 'both'].map((type) => (
+                {['crochet', 'knit'].map((type) => (
                   <div key={type} className="flex items-center space-x-2">
                     <RadioGroupItem value={type} id={type} />
                     <Label htmlFor={type} className="text-sm capitalize">
@@ -120,7 +120,7 @@ export function ProjectDetails({ project, onSave }: ProjectDetailsProps) {
           <div className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="hooks" className="text-sm font-medium">
-                Hooks
+                {formData.type == ProjectType.Crochet ? 'Hooks' : 'Needles'}
               </Label>
               <Input
                 id="hooks"
