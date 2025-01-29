@@ -47,11 +47,23 @@ export function useProjects(currentId: string | null) {
     fetchProjects(true);
   };
 
-  const saveProject = async (project: Omit<Project, 'id'>) => {
+  const saveProject = async (
+    project: Omit<Project, 'id'>,
+    imageFile?: File
+  ) => {
+    setLoading(true);
     const id = currentProject
-      ? await updateProject(userId, { ...project, id: currentProject.id })
-      : await createProject(userId, project);
+      ? await updateProject(
+          userId,
+          {
+            ...project,
+            id: currentProject.id,
+          },
+          imageFile
+        )
+      : await createProject(userId, project, imageFile);
     invalidateCache();
+    setLoading(false);
     return id;
   };
 

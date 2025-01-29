@@ -7,13 +7,14 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
 import { StitchCounter } from './stitch-counter';
-import { Plus, ImagePlus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { Project, ProjectType } from '../lib/types';
 import { TitleInput } from './ui/title-input';
+import ImageUpload from './image-upload';
 
 interface ProjectDetailsProps {
   project: Project | null;
-  onSave: (project: Omit<Project, 'id'>) => void;
+  onSave: (project: Omit<Project, 'id'>, imageFile?: File) => void;
 }
 
 const initialProjectState: Omit<Project, 'id'> = {
@@ -23,11 +24,13 @@ const initialProjectState: Omit<Project, 'id'> = {
   yarn: '',
   notes: '',
   counters: [],
+  imageUrl: '',
 };
 
 export function ProjectDetails({ project, onSave }: ProjectDetailsProps) {
   const [formData, setFormData] =
     useState<Omit<Project, 'id'>>(initialProjectState);
+  const [imageFile, setImageFile] = useState<File | undefined>(undefined);
 
   useEffect(() => {
     if (project) {
@@ -47,7 +50,7 @@ export function ProjectDetails({ project, onSave }: ProjectDetailsProps) {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSave(formData);
+    onSave(formData, imageFile);
   };
 
   const addCounter = () => {
@@ -107,14 +110,10 @@ export function ProjectDetails({ project, onSave }: ProjectDetailsProps) {
               </RadioGroup>
             </div>
           </div>
-          <Button variant="outline" className="w-32 h-32 sm:w-36 sm:h-36 p-1">
-            <div className="flex flex-col items-center justify-center w-full h-full border-2 border-dashed border-gray-300 rounded-lg">
-              <ImagePlus className="w-8 h-8 sm:w-10 sm:h-10 text-gray-400 mb-2" />
-              <span className="text-xs sm:text-sm text-gray-500 text-center">
-                Add an image
-              </span>
-            </div>
-          </Button>
+          <ImageUpload
+            existingImageUrl={project?.imageUrl}
+            onImageUpload={setImageFile}
+          />
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2 lg:gap-x-12">

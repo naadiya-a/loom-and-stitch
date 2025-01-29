@@ -6,6 +6,7 @@ export type Project = {
   yarn?: string;
   notes?: string;
   counters: Counter[];
+  imageUrl?: string;
 };
 
 export type Counter = {

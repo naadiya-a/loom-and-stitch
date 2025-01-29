@@ -31,8 +31,11 @@ export default function ProjectPage() {
     router.push('/project/new');
   };
 
-  const handleSaveProject = async (projectData: Omit<Project, 'id'>) => {
-    const id = await saveProject(projectData);
+  const handleSaveProject = async (
+    projectData: Omit<Project, 'id'>,
+    imageFile?: File
+  ) => {
+    const id = await saveProject(projectData, imageFile);
     router.push(`/project/${id}`);
   };
 

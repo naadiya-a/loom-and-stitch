@@ -8,12 +8,19 @@ import {
   query,
   where,
 } from 'firebase/firestore';
-import { db } from '@/firebase-config';
+import { db, storage } from '@/firebase-config';
 import { Project } from '@/lib/types';
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes,
+} from 'firebase/storage';
 
 export async function createProject(
   userId: string,
-  project: Omit<Project, 'id'>
+  project: Omit<Project, 'id'>,
+  imageFile?: File
 ) {
   if (!userId || userId === '') {
     throw new Error('User is invalid');
@@ -21,16 +28,40 @@ export async function createProject(
 
   const projectRef = collection(db, 'projects');
   const docRef = await addDoc(projectRef, { ...project, userId });
-  return docRef.id;
+  const projectId = docRef.id;
+
+  if (imageFile) {
+    const imageUrl = await uploadImageToStorage(userId, projectId, imageFile);
+    await updateDoc(doc(db, 'projects', projectId), { imageUrl });
+  }
+
+  return projectId;
 }
 
-export async function updateProject(userId: string, project: Project) {
+export async function updateProject(
+  userId: string,
+  project: Project,
+  imageFile?: File
+) {
   if (!userId || userId === '') {
     throw new Error('User is invalid');
   }
 
   const docRef = doc(db, 'projects', project.id);
-  await updateDoc(docRef, { ...project, userId });
+
+  if (imageFile) {
+    const existingProject = await getProjectById(userId, project.id);
+    if (existingProject?.imageUrl) {
+      await deleteImageFromStorage(existingProject.imageUrl);
+    }
+    project.imageUrl = await uploadImageToStorage(
+      userId,
+      project.id,
+      imageFile
+    );
+  }
+
+  await updateDoc(docRef, project);
   return project.id;
 }
 
@@ -64,4 +95,19 @@ export async function getAllProjects(userId: string) {
     projects.push({ id: doc.id, ...doc.data() } as Project);
   });
   return projects;
+}
+
+async function uploadImageToStorage(
+  userId: string,
+  projectId: string,
+  file: File
+): Promise<string> {
+  const storageRef = ref(storage, `projects/${userId}/${projectId}`);
+  await uploadBytes(storageRef, file);
+  return await getDownloadURL(storageRef);
+}
+
+async function deleteImageFromStorage(imageUrl: string): Promise<void> {
+  const storageRef = ref(storage, imageUrl);
+  await deleteObject(storageRef);
 }
