@@ -2,8 +2,7 @@ import * as React from "react"
 import { Input } from "./input"
 import { cn } from "@/lib/utils"
 
-export interface TitleInputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+export type TitleInputProps = React.InputHTMLAttributes<HTMLInputElement>
 
 const TitleInput = React.forwardRef<HTMLInputElement, TitleInputProps>(
   ({ className, ...props }, ref) => {

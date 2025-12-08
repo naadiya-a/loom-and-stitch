@@ -34,7 +34,10 @@ export function ProjectDetails({ project, onSave }: ProjectDetailsProps) {
 
   useEffect(() => {
     if (project) {
-      setFormData({ ...formData, ...project });
+      setFormData((prevFormData) => ({
+        ...prevFormData, 
+        ...project,
+      }));
     }
   }, [project]);
 
