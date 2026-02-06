@@ -7,7 +7,7 @@ import {
   NextOrObserver,
   User,
 } from 'firebase/auth';
-import { destroyCookie, setCookie } from 'nookies';
+import { setCookie, deleteCookie } from 'cookies-next';
 
 export function onAuthStateChanged(cb: NextOrObserver<User>) {
   return _onAuthStateChanged(auth, cb);
@@ -58,7 +58,7 @@ export async function createUser(email: string, password: string) {
 
   const token = await userCredential.user.getIdToken();
 
-  setCookie(null, 'token', token, {
+  setCookie('token', token, {
     maxAge: 7 * 24 * 60 * 60,
     path: '/',
   });
@@ -74,7 +74,7 @@ export async function login(email: string, password: string) {
   );
   const token = await userCredential.user.getIdToken();
 
-  setCookie(null, 'token', token, {
+  setCookie('token', token, {
     maxAge: 7 * 24 * 60 * 60,
     path: '/',
   });
@@ -84,5 +84,5 @@ export async function login(email: string, password: string) {
 
 export async function logout() {
   await auth.signOut();
-  destroyCookie(null, 'token');
+  deleteCookie('token');
 }
